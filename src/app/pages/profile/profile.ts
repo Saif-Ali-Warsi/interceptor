@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { ProfileService } from '../../core/services/profile-service';
 import { AuthService } from '../../core/services/auth-service';
-import {  } from '@angular/core';
-
 
 @Component({
   selector: 'app-profile',
@@ -9,14 +8,19 @@ import {  } from '@angular/core';
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class Profile implements OnInit{
+export class Profile implements OnInit {
 
-private authService = inject(AuthService)
+  private authService = inject(AuthService)
+  private profileService = inject(ProfileService)
 
-ngOnInit() {
-  this.authService.getProfile().subscribe((res)=>{
-    console.log(res)
-  })
-}
+  ngOnInit() {
+    this.profileService.getProfile().subscribe((res) => {
+      console.log(res)
+    })
+  }
+
+  logout() {
+    this.authService.logout();
+  }
 
 }

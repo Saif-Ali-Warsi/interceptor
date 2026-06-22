@@ -24,8 +24,8 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  getProfile(){
-    return this.http.get(`${this.apiUrl}/auth/me`)
+  logout() {
+    return localStorage.removeItem('token')
   }
 
 }
