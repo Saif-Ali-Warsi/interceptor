@@ -28,4 +28,10 @@ export class AuthService {
     return localStorage.removeItem('token')
   }
 
+  refreshToken() {
+    return this.http.post(`${this.apiUrl}/refresh`, {
+      refreshToken: localStorage.getItem('refreshToken')
+    })
+  }
+
 }

@@ -24,7 +24,14 @@ export class Login {
       (res: any) => {
         console.log(res)
 
-        this.authService.saveToken(res.accessToken
+        localStorage.setItem(
+          'token',
+          res.accessToken
+        );
+
+        localStorage.setItem(
+          'refreshToken',
+          res.refreshToken
         )
 
         this.isLoggedIn = true;

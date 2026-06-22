@@ -1,7 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth-service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -14,13 +14,41 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       switch (error.status) {
 
-        case 401: console.log('Unauthorized')
+        case 401:
 
-          authService.logout()
+          console.log('Unauthorized');
 
-          router.navigate(['/login'])
+          return authService.refreshToken().pipe(
 
-          break;
+            switchMap((response: any) => {
+
+              authService.saveToken(
+                response.accessToken
+              );
+
+              const retryReq = req.clone({
+                setHeaders: {
+                  Authorization:
+                    `Bearer ${response.accessToken}`
+                }
+              });
+
+              return next(retryReq);
+            }),
+
+            catchError((refreshError) => {
+
+              authService.logout();
+
+              router.navigate(['/login']);
+
+              return throwError(
+                () => refreshError
+              );
+
+            })
+
+          );
 
         case 403: console.log('Forbidden')
 
