@@ -10,6 +10,8 @@ import { RouterLink } from "@angular/router";
 })
 export class Login {
 
+  isLoggedIn = false;
+
   private authService = inject(AuthService)
 
   login() {
@@ -24,6 +26,8 @@ export class Login {
 
         this.authService.saveToken(res.accessToken
         )
+
+        this.isLoggedIn = true;
       }
     )
   }

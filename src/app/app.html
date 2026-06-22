@@ -1,5 +1,10 @@
-@if(loader$ | async){
-<div>Loading...</div>
+@if (loader$ | async) {
+  <div class="loader-overlay">
+    <div class="loader-card">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+  </div>
 }
 
 <router-outlet></router-outlet>
